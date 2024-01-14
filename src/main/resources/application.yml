@@ -144,3 +144,10 @@ fetchers:
 ## Has a password 88889999
 ##    - url: https://vpi123.x.yupoo.com
 ##      name: Blue Sky
+  search-keyword-ru:
+    - url: https://www.uusoccer.ru/
+      name: UUSoccer
+    - url: https://www.topjersey.ru/
+      name: TopJersey
+    - url: https://www.vip-jersey.ru/
+      name: Vip Jersey

@@ -9,6 +9,8 @@ data class FetchersConfigurationProperties(
     val listR1: List<ProviderData>,
     @NestedConfigurationProperty
     val yupoo: List<ProviderData>,
+    @NestedConfigurationProperty
+    val searchKeywordRu: List<ProviderData>,
 )
 
 data class ProviderData(
