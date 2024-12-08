@@ -1,6 +1,7 @@
 package dev.moyis.shirtscanner.testsupport
 
 import dev.moyis.shirtscanner.Shirtscanner
+import dev.moyis.shirtscanner.infrastructure.configuration.properties.ApiKeyFilterConfigurationProperties
 import io.restassured.RestAssured
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -29,9 +30,15 @@ abstract class AbstractIntegrationTest {
     @Autowired
     protected lateinit var webTestClient: WebTestClient
 
+    @Autowired
+    private lateinit var config: ApiKeyFilterConfigurationProperties
+
+    protected lateinit var apiKey: String
+
     @BeforeEach
-    fun setUpRestAssured() {
+    fun configureEnvironment() {
         RestAssured.port = port
+        apiKey = config.apiKey
     }
 
     @AfterEach
@@ -39,3 +46,5 @@ abstract class AbstractIntegrationTest {
         tfs.clearAll()
     }
 }
+
+const val API_KEY_HEADER = "X-API-KEY"

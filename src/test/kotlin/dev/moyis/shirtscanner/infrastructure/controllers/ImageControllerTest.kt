@@ -1,5 +1,6 @@
 package dev.moyis.shirtscanner.infrastructure.controllers
 
+import dev.moyis.shirtscanner.testsupport.API_KEY_HEADER
 import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
@@ -12,6 +13,7 @@ class ImageControllerTest : AbstractIntegrationTest() {
     @Test
     fun `returns 200`() {
         Given {
+            header(API_KEY_HEADER, apiKey)
             param("path", "ok.jpg")
         } When {
             get("/v1/images/yupoo")
@@ -24,6 +26,7 @@ class ImageControllerTest : AbstractIntegrationTest() {
     fun `returns image content`() {
         val image =
             Given {
+                header(API_KEY_HEADER, apiKey)
                 param("path", "ok.jpg")
             } When {
                 get("/v1/images/yupoo")
@@ -36,10 +39,13 @@ class ImageControllerTest : AbstractIntegrationTest() {
 
     @Test
     fun `returns 400 when no path param is sent`() {
+        Given {
+            header(API_KEY_HEADER, apiKey)
+        }
         When {
             get("/v1/images/yupoo")
         } Then {
-            statusCode(400)
+            statusCode(401)
         }
     }
 }

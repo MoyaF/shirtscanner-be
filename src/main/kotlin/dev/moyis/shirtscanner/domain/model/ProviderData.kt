@@ -23,4 +23,6 @@ data class ProviderStatusInformation(
 
 @RegisterReflectionForBinding
 @JvmInline
-value class ProviderName(val value: String)
+value class ProviderName(val value: String) {
+    override fun toString() = value
+}

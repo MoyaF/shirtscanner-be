@@ -2,6 +2,7 @@ package dev.moyis.shirtscanner.infrastructure.controllers
 
 import dev.moyis.shirtscanner.domain.model.SearchResultEvent
 import dev.moyis.shirtscanner.infrastructure.controllers.model.SearchResultResponse
+import dev.moyis.shirtscanner.testsupport.API_KEY_HEADER
 import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
@@ -20,6 +21,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         @Test
         fun `return 200`() {
             Given {
+                header(API_KEY_HEADER, apiKey)
                 queryParam("q", "argentina")
             } When {
                 get("/v1/products")
@@ -32,6 +34,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         fun `return provider names for each result`() {
             val providerResults =
                 Given {
+                    header(API_KEY_HEADER, apiKey)
                     queryParam("q", "argentina")
                 } When {
                     get("/v1/products")
@@ -45,6 +48,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         fun `return products for each provider`() {
             val providerResults =
                 Given {
+                    header(API_KEY_HEADER, apiKey)
                     queryParam("q", "argentina")
                 } When {
                     get("/v1/products")
@@ -59,10 +63,12 @@ class ProductsControllerTest : AbstractIntegrationTest() {
 
         @Test
         fun `return 400 when no search param is sent`() {
-            When {
+            Given {
+                header(API_KEY_HEADER, apiKey)
+            } When {
                 get("/v1/products")
             } Then {
-                statusCode(400)
+                statusCode(403)
             }
         }
     }
@@ -74,6 +80,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             webTestClient
                 .get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
+                .header(API_KEY_HEADER, apiKey)
                 .exchange()
                 .expectStatus().isOk
         }
@@ -82,6 +89,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         fun `return provider names for each result`() {
             webTestClient.get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
+                .header(API_KEY_HEADER, apiKey)
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .returnResult<SearchResultEvent>()
@@ -97,6 +105,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             webTestClient.get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
                 .accept(MediaType.TEXT_EVENT_STREAM)
+                .header(API_KEY_HEADER, apiKey)
                 .exchange()
                 .returnResult<SearchResultEvent>()
                 .responseBody
@@ -110,6 +119,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         fun `return number of configured providers in each message`() {
             webTestClient.get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
+                .header(API_KEY_HEADER, apiKey)
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .returnResult<SearchResultEvent>()
@@ -122,10 +132,12 @@ class ProductsControllerTest : AbstractIntegrationTest() {
 
         @Test
         fun `return 400 when no search param is sent`() {
-            When {
+            Given {
+                header(API_KEY_HEADER, apiKey)
+            } When {
                 get("/v1/products/stream")
             } Then {
-                statusCode(400)
+                statusCode(403)
             }
         }
     }

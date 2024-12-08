@@ -5,3 +5,7 @@ fetchers:
 logging:
   level:
     io.moya.shirtscanner: debug
+
+security:
+  enabled: false
+  api-key: "disabled"

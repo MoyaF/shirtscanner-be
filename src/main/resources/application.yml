@@ -155,3 +155,7 @@ image-fetcher:
   referer: https://yupoo.com/
   max-retries: 3
   retry-delay: 1s
+
+security:
+  enabled: true
+  api-key: ${API_KEY}

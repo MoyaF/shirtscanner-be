@@ -4,8 +4,10 @@ import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.infrastructure.controllers.model.ProviderResponse
+import dev.moyis.shirtscanner.testsupport.API_KEY_HEADER
 import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Extract
+import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import org.assertj.core.api.Assertions.assertThat
@@ -15,7 +17,9 @@ import java.net.URI
 class ProvidersControllerTest : AbstractIntegrationTest() {
     @Test
     fun `providers endpoint returns 200`() {
-        When {
+        Given {
+            header(API_KEY_HEADER, apiKey)
+        } When {
             get("/v1/providers")
         } Then {
             statusCode(200)
@@ -25,7 +29,9 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
     @Test
     fun `providers endpoint returns all configured providers`() {
         val providers =
-            When {
+            Given {
+                header(API_KEY_HEADER, apiKey)
+            } When {
                 get("/v1/providers")
             } Extract {
                 body().jsonPath().getList("", ProviderResponse::class.java)
@@ -40,7 +46,9 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
             aValidProvider().copy(name = ProviderName("Yupoo Test"), status = ProviderStatus.DOWN),
         )
         val providers =
-            When {
+            Given {
+                header(API_KEY_HEADER, apiKey)
+            } When {
                 get("/v1/providers")
             } Extract {
                 body().jsonPath().getList("", ProviderResponse::class.java)
@@ -53,7 +61,9 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
     @Test
     fun `returns status UNKNOWN when no status is persisted`() {
         val providers =
-            When {
+            Given {
+                header(API_KEY_HEADER, apiKey)
+            } When {
                 get("/v1/providers")
             } Extract {
                 body().jsonPath().getList("", ProviderResponse::class.java)
@@ -65,12 +75,16 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
 
     @Test
     fun `checks status when post providers`() {
-        When {
+        Given {
+            header(API_KEY_HEADER, apiKey)
+        } When {
             post("/v1/providers")
         }
 
         val providers =
-            When {
+            Given {
+                header(API_KEY_HEADER, apiKey)
+            } When {
                 get("/v1/providers")
             } Extract {
                 body().jsonPath().getList("", ProviderResponse::class.java)
